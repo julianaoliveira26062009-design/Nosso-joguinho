@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nosso Joguinho ❤️</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ffd6e7, #fff0f5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: #5a1734;
+        }
+
+        .heart {
+            position: fixed;
+            color: rgba(255, 77, 136, 0.35);
+            font-size: 25px;
+            animation: float 6s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-10vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .game {
+            width: 90%;
+            max-width: 500px;
+            background: white;
+            border-radius: 30px;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(150, 50, 90, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 17px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ffc0d8;
+            border-radius: 15px;
+            margin-bottom: 12px;
+            font-size: 16px;
+            outline: none;
+            text-align: center;
+        }
+
+        input:focus {
+            border-color: #ff4d88;
+        }
+
+        button {
+            border: none;
+            background: #ff4d88;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 20px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            margin: 6px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background: #e83d75;
+        }
+
+        .secondary {
+            background: #ffd1e1;
+            color: #7d2449;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .player {
+            background: #fff0f5;
+            padding: 12px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .question {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 25px 0;
+        }
+
+        .score {
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        .final-heart {
+            font-size: 70px;
+            animation: beat 1s infinite;
+        }
+
+        @keyframes beat {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        .result {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- CORAÇÕES -->
+    <div class="heart" style="left:10%; animation-delay:0s;">♥</div>
+    <div class="heart" style="left:25%; animation-delay:2s;">♥</div>
+    <div class="heart" style="left:45%; animation-delay:4s;">♥</div>
+    <div class="heart" style="left:65%; animation-delay:1s;">♥</div>
+    <div class="heart" style="left:85%; animation-delay:3s;">♥</div>
+
+
+    <div class="game">
+
+        <!-- TELA INICIAL -->
+        <div id="startScreen">
+
+            <h1>Nosso Joguinho ❤️</h1>
+
+            <p>
+                Um desafio para descobrir<br>
+                o quanto nós se conhece!
+            </p>
+
+            <input
+                type="text"
+                id="player1"
+                placeholder="Nome do Jogador 1"
+            >
+
+            <input
+                type="text"
+                id="player2"
+                placeholder="Nome do Jogador 2"
+            >
+
+            <button onclick="startGame()">
+                Começar 💕
+            </button>
+
+        </div>
+
+
+        <!-- TELA DO JOGO -->
+        <div id="gameScreen" class="hidden">
+
+            <div class="player">
+                Vez de: <span id="currentPlayer"></span>
+            </div>
+
+            <div class="question" id="question">
+                Pergunta
+            </div>
+
+            <button onclick="answer(true)">
+                ❤️ Eu acertei!
+            </button>
+
+            <button
+                class="secondary"
+                onclick="answer(false)"
+            >
+                😭 Errei
+            </button>
+
+            <div class="score">
+                <span id="score1Name">Jogador 1</span>:
+                <span id="score1">0</span>
+                pontos
+                <br>
+
+                <span id="score2Name">Jogador 2</span>:
+                <span id="score2">0</span>
+                pontos
+            </div>
+
+        </div>
+
+
+        <!-- TELA FINAL -->
+        <div id="endScreen" class="hidden">
+
+            <div class="final-heart">❤️</div>
+
+            <h1>Fim de jogo!</h1>
+
+            <div class="result" id="result"></div>
+
+            <p>
+                O mais importante é que nós
+                continuem criando memórias juntos. 🥹💕
+            </p>
+
+            <button onclick="restartGame()">
+                Jogar novamente 🔄
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        let name1 = "";
+        let name2 = "";
+
+        let currentPlayer = 1;
+
+        let score1 = 0;
+        let score2 = 0;
+
+        let questionNumber = 0;
+
+
+        const questions = [
+
+            "Qual é a comida favorita do outro?",
+
+            "Qual é o maior sonho do outro?",
+
+            "Qual foi o momento mais especial que vocês viveram juntos?",
+
+            "Qual é o filme que o outro mais gosta?",
+
+            "Qual música lembra vocês dois?",
+
+            "Qual é a maior qualidade do outro?",
+
+            "Qual lugar vocês gostariam de conhecer juntos?",
+
+            "Quem se apaixonou primeiro?",
+
+            "Qual é a coisa que mais faz o outro rir?",
+
+            "Qual seria o encontro perfeito para vocês?",
+
+            "Qual é a maior mania do outro?",
+
+            "Se vocês pudessem viajar agora, para onde iriam?",
+
+            "Qual apelido carinhoso vocês mais gostam?",
+
+            "Qual foi a primeira impressão que vocês tiveram um do outro?",
+
+            "O que vocês mais gostam de fazer juntos?"
+
+        ];
+
+
+        function startGame() {
+
+            name1 = document.getElementById("player1").value.trim();
+
+            name2 = document.getElementById("player2").value.trim();
+
+            if (name1 === "" || name2 === "") {
+
+                alert("Coloque o nome dos dois primeiro! ❤️");
+
+                return;
+
+            }
+
+            document.getElementById("startScreen")
+                .classList.add("hidden");
+
+            document.getElementById("gameScreen")
+                .classList.remove("hidden");
+
+            document.getElementById("score1Name")
+                .textContent = name1;
+
+            document.getElementById("score2Name")
+                .textContent = name2;
+
+            showQuestion();
+
+        }
+
+
+        function showQuestion() {
+
+            if (questionNumber >= questions.length) {
+
+                finishGame();
+
+                return;
+
+            }
+
+            document.getElementById("currentPlayer")
+                .textContent =
+                currentPlayer === 1 ? name1 : name2;
+
+            document.getElementById("question")
+                .textContent =
+                questions[questionNumber];
+
+        }
+
+
+        function answer(correct) {
+
+            if (correct) {
+
+                if (currentPlayer === 1) {
+
+                    score1++;
+
+                } else {
+
+                    score2++;
+
+                }
+
+            }
+
+
+            document.getElementById("score1")
+                .textContent = score1;
+
+            document.getElementById("score2")
+                .textContent = score2;
+
+
+            questionNumber++;
+
+
+            currentPlayer =
+                currentPlayer === 1 ? 2 : 1;
+
+
+            showQuestion();
+
+        }
+
+
+        function finishGame() {
+
+            document.getElementById("gameScreen")
+                .classList.add("hidden");
+
+            document.getElementById("endScreen")
+                .classList.remove("hidden");
+
+
+            let message = "";
+
+            if (score1 > score2) {
+
+                message =
+                    `${name1} ganhou! 🏆❤️<br>${score1} x ${score2}`;
+
+            } else if (score2 > score1) {
+
+                message =
+                    `${name2} ganhou! 🏆❤️<br>${score2} x ${score1}`;
+
+            } else {
+
+                message =
+                    `Empate! 🥰❤️<br>${score1} x ${score2}`;
+
+            }
+
+
+            document.getElementById("result")
+                .innerHTML = message;
+
+        }
+
+
+        function restartGame() {
+
+            score1 = 0;
+            score2 = 0;
+
+            questionNumber = 0;
+
+            currentPlayer = 1;
+
+            document.getElementById("score1")
+                .textContent = "0";
+
+            document.getElementById("score2")
+                .textContent = "0";
+
+            document.getElementById("endScreen")
+                .classList.add("hidden");
+
+            document.getElementById("startScreen")
+                .classList.remove("hidden");
+
+        }
+
+    </script>
+
+</body>
+</html>
